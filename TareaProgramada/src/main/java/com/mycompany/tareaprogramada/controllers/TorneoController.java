@@ -1,12 +1,15 @@
 package com.mycompany.tareaprogramada.controllers;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 import com.mycompany.tareaprogramada.models.Certificado;
 import com.mycompany.tareaprogramada.models.Estadistica;
 import com.mycompany.tareaprogramada.models.Equipo;
 import com.mycompany.tareaprogramada.models.Partido;
 import com.mycompany.tareaprogramada.models.Torneo;
+import com.mycompany.tareaprogramada.util.LocalDateAdapter;
+import com.mycompany.tareaprogramada.util.LocalDateTimeAdapter;
 import com.mycompany.tareaprogramada.util.LlaveGenerator;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -15,36 +18,64 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.lang.reflect.Type;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.*;
 
 /**
- * Controlador de persistencia y flujo de negocio para la entidad Torneo.
- * - Lee/escribe en "torneos.json"
- * - Inscribe/desinscribe equipos
- * - Genera llaves (iniciales y siguientes rondas)
- * - Registra resultados (incluye desempate)
- * - Calcula estadísticas por torneo
- * - Genera certificado para el campeón
+ * Controlador de persistencia y flujo de negocio para la entidad Torneo. -
+ * Lee/escribe en "torneos.json" - Inscribe/desinscribe equipos - Genera llaves
+ * (iniciales y siguientes rondas) - Registra resultados (incluye desempate) -
+ * Calcula estadísticas por torneo - Genera certificado para el campeón
  */
 public class TorneoController {
 
     private static final String ARCHIVO_JSON = "torneos.json";
-    private final Gson gson = new Gson();
+
+    // Ahora usamos un GsonBuilder con adaptadores para LocalDate y LocalDateTime
+    private final Gson gson = new GsonBuilder()
+            .registerTypeAdapter(LocalDate.class, new LocalDateAdapter())
+            .registerTypeAdapter(LocalDateTime.class, new LocalDateTimeAdapter())
+            .setPrettyPrinting()
+            .create();
+
     private ObservableList<Torneo> torneos;
 
     public TorneoController() {
         File archivo = new File(ARCHIVO_JSON);
+
         if (archivo.exists()) {
+            // Si el archivo existe pero está vacío (0 bytes),
+            // inicializamos lista vacía y salimos.
+            if (archivo.length() == 0) {
+                torneos = FXCollections.observableArrayList();
+                return;
+            }
+
             try (FileReader reader = new FileReader(archivo)) {
-                Type tipoLista = new TypeToken<List<Torneo>>() {}.getType();
-                List<Torneo> lista = gson.fromJson(reader, tipoLista);
-                torneos = FXCollections.observableArrayList(lista);
+                Type tipoLista = new TypeToken<List<Torneo>>() {
+                }.getType();
+                List<Torneo> lista;
+                try {
+                    lista = gson.fromJson(reader, tipoLista);
+                } catch (Exception ex) {
+                    // Si ocurre cualquier JsonSyntaxException / EOFException al leer,
+                    // inicializamos como lista vacía en lugar de propagar el error.
+                    torneos = FXCollections.observableArrayList();
+                    return;
+                }
+
+                if (lista == null) {
+                    torneos = FXCollections.observableArrayList();
+                } else {
+                    torneos = FXCollections.observableArrayList(lista);
+                }
             } catch (Exception e) {
                 e.printStackTrace();
                 torneos = FXCollections.observableArrayList();
             }
         } else {
+            // Si el archivo no existe, inicializamos lista vacía.
             torneos = FXCollections.observableArrayList();
         }
     }
@@ -85,6 +116,7 @@ public class TorneoController {
 
     /**
      * Inscribe un equipo en el torneo indicado (si aún hay cupo).
+     *
      * @param t Torneo donde se inscribirá.
      * @param e Equipo a inscribir.
      * @return true si se inscribió; false si ya no había cupo.
@@ -102,6 +134,7 @@ public class TorneoController {
 
     /**
      * Desinscribe un equipo de un torneo (antes de generar llaves).
+     *
      * @param t Torneo.
      * @param e Equipo a desinscribir.
      */
@@ -113,8 +146,9 @@ public class TorneoController {
     }
 
     /**
-     * Genera las llaves iniciales de enfrentamientos para el torneo (si no estaban).
-     * Utiliza LlaveGenerator.
+     * Genera las llaves iniciales de enfrentamientos para el torneo (si no
+     * estaban). Utiliza LlaveGenerator.
+     *
      * @param t Torneo en el cual generar llaves.
      */
     public void generarLlavesTorneo(Torneo t) {
@@ -125,18 +159,20 @@ public class TorneoController {
     }
 
     /**
-     * Registra el resultado de un partido dentro de un torneo:
-     * - Actualiza goles.
-     * - Marca finalizado = true.
-     * - Si el partido estaba empatado, habrá que invocar desempate
-     *   desde la capa de vista (PartidoViewController) para asignar golesLocal/golesVisitante.
+     * Registra el resultado de un partido dentro de un torneo: - Actualiza
+     * goles. - Marca finalizado = true. - Si el partido estaba empatado, habrá
+     * que invocar desempate desde la capa de vista (PartidoViewController) para
+     * asignar golesLocal/golesVisitante.
+     *
      * @param t Torneo que contiene los partidos.
      * @param partidoId ID del partido a finalizar.
      * @param golesLocal Goles finales del equipo local.
      * @param golesVisitante Goles finales del equipo visitante.
      */
     public void registrarResultado(Torneo t, String partidoId, int golesLocal, int golesVisitante) {
-        if (t == null || partidoId == null) return;
+        if (t == null || partidoId == null) {
+            return;
+        }
 
         for (Partido p : t.getPartidos()) {
             if (p.getId().equals(partidoId) && !p.isFinalizado()) {
@@ -148,14 +184,17 @@ public class TorneoController {
     }
 
     /**
-     * Genera la siguiente ronda de partidos, tomando los ganadores de la ronda actual.
-     * - Recoge a todos los ganadores de los partidos finalizados.
-     * - Si hay al menos 2, limpia la lista de partidos y crea nuevos enfrentamientos.
-     * - Persiste los cambios en JSON.
+     * Genera la siguiente ronda de partidos, tomando los ganadores de la ronda
+     * actual. - Recoge a todos los ganadores de los partidos finalizados. - Si
+     * hay al menos 2, limpia la lista de partidos y crea nuevos
+     * enfrentamientos. - Persiste los cambios en JSON.
+     *
      * @param t Torneo en el que generar la siguiente ronda.
      */
     public void generarSiguienteRonda(Torneo t) {
-        if (t == null) return;
+        if (t == null) {
+            return;
+        }
 
         List<Equipo> ganadores = new ArrayList<>();
         for (Partido p : t.getPartidos()) {
@@ -184,9 +223,10 @@ public class TorneoController {
     }
 
     /**
-     * Calcula y devuelve una lista de Estadistica para cada equipo en el torneo.
-     * - Recorre todos los partidos finalizados.
-     * - Suma goles, victorias directas, victorias por desempate y asigna puntos.
+     * Calcula y devuelve una lista de Estadistica para cada equipo en el
+     * torneo. - Recorre todos los partidos finalizados. - Suma goles, victorias
+     * directas, victorias por desempate y asigna puntos.
+     *
      * @param t Torneo.
      * @return Lista de Estadistica (uno por equipo inscrito).
      */
@@ -199,7 +239,9 @@ public class TorneoController {
 
         // Recorrer cada partido finalizado y actualizar la estadística de ambos equipos
         for (Partido p : t.getPartidos()) {
-            if (!p.isFinalizado()) continue;
+            if (!p.isFinalizado()) {
+                continue;
+            }
 
             Equipo local = p.getEquipoLocal();
             Equipo visitante = p.getEquipoVisitante();
@@ -225,10 +267,11 @@ public class TorneoController {
     }
 
     /**
-     * Genera un Certificado para el equipo campeón del torneo:
-     * - Asume que el último partido en la lista es la final.
-     * - Verifica que esté finalizado y obtiene su ganador.
-     * - Calcula estadística y crea un objeto Certificado con todos los datos.
+     * Genera un Certificado para el equipo campeón del torneo: - Asume que el
+     * último partido en la lista es la final. - Verifica que esté finalizado y
+     * obtiene su ganador. - Calcula estadística y crea un objeto Certificado
+     * con todos los datos.
+     *
      * @param t Torneo del cual se desea generar el certificado.
      * @return Certificado completo o null si no se puede generar.
      */

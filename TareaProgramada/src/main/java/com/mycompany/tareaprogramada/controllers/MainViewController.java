@@ -35,7 +35,7 @@ public class MainViewController {
 
     @FXML
     private void onMenuEstadisticas(ActionEvent event) {
-        abrirVentana("/fxml/EstadisticaView.fxml", "Estadísticas y Ranking", 900, 600);
+        abrirVentana("/fxml/EstadisticasView.fxml", "Estadísticas y Ranking", 900, 600);
     }
 
     // =============================
@@ -50,7 +50,7 @@ public class MainViewController {
         alerta.setHeaderText("Sistema de Gestión de Torneos");
         alerta.setContentText(
             "Versión: 1.0.0\n" +
-            "Desarrollado por: Tu Nombre o Equipo\n" +
+            "Desarrollado por: Equipo de trabajo\n" +
             "Descripción: Esta aplicación permite gestionar deportes, equipos y torneos\n" +
             "con generación de llaves, partidos, estadísticas y certificados en PDF."
         );

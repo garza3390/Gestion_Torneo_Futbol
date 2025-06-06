@@ -46,14 +46,18 @@
                        GridPane.rowIndex="1" GridPane.columnIndex="5"
                        prefWidth="80"/>
 
+            <!-- Se añadió onAction="#onCrearTorneo" -->
             <Button text="Crear Torneo"
                     fx:id="btnCrearTorneo"
+                    onAction="#onCrearTorneo"
                     GridPane.rowIndex="1" GridPane.columnIndex="6"
                     prefWidth="120"
                     style="-fx-font-weight:bold; -fx-background-color:#4CAF50; -fx-text-fill:white;"/>
 
+            <!-- Se añadió onAction="#onEliminarTorneo" -->
             <Button text="Eliminar Torneo"
                     fx:id="btnEliminarTorneo"
+                    onAction="#onEliminarTorneo"
                     GridPane.rowIndex="1" GridPane.columnIndex="7"
                     prefWidth="120"
                     style="-fx-font-weight:bold; -fx-background-color:#E53935; -fx-text-fill:white;"/>
@@ -116,8 +120,10 @@
                           GridPane.rowIndex="4" GridPane.columnIndex="1"
                           prefWidth="200"/>
 
+                <!-- Se añadió onAction="#onInscribirEquipo" -->
                 <Button text="Inscribir"
                         fx:id="btnInscribirEquipo"
+                        onAction="#onInscribirEquipo"
                         GridPane.rowIndex="4" GridPane.columnIndex="2"
                         prefWidth="100"
                         style="-fx-background-color:#2196F3; -fx-text-fill:white;"/>
@@ -137,8 +143,10 @@
 
             <!-- Botón para generar llaves iniciales -->
             <HBox alignment="CENTER_LEFT">
+                <!-- Se añadió onAction="#onGenerarLlaves" -->
                 <Button text="Generar Llaves"
                         fx:id="btnGenerarLlaves"
+                        onAction="#onGenerarLlaves"
                         prefWidth="150"
                         style="-fx-font-weight:bold; -fx-background-color:#FF9800; -fx-text-fill:white;"/>
             </HBox>
@@ -168,12 +176,17 @@
                 <Insets top="10" right="10" bottom="10" left="10"/>
             </padding>
 
+            <!-- Se añadió onAction="#onSiguienteRonda" -->
             <Button text="Siguiente Ronda"
                     fx:id="btnSiguienteRonda"
+                    onAction="#onSiguienteRonda"
                     prefWidth="150"
                     style="-fx-font-weight:bold; -fx-background-color:#9C27B0; -fx-text-fill:white;"/>
+
+            <!-- Se añadió onAction="#onImprimirCertificado" -->
             <Button text="Imprimir Certificado"
                     fx:id="btnImprimirCertificado"
+                    onAction="#onImprimirCertificado"
                     prefWidth="180"
                     style="-fx-font-weight:bold; -fx-background-color:#4CAF50; -fx-text-fill:white;"/>
         </HBox>

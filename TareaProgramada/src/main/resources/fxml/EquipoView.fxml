@@ -78,9 +78,10 @@
                       GridPane.columnIndex="4"
                       prefWidth="150.0" />
 
-            <!-- Button: Seleccionar foto -->
+            <!-- Button: Seleccionar foto (ahora con onAction) -->
             <Button text="Seleccionar foto"
                     fx:id="btnSeleccionarFoto"
+                    onAction="#onSeleccionarFoto"
                     GridPane.rowIndex="1"
                     GridPane.columnIndex="0"
                     GridPane.columnSpan="2" />
@@ -95,6 +96,7 @@
             <!-- Botón: Agregar equipo -->
             <Button text="Agregar"
                     fx:id="btnAgregarEquipo"
+                    onAction="#onAgregarEquipo"
                     GridPane.rowIndex="2"
                     GridPane.columnIndex="1"
                     prefWidth="100" />
@@ -102,6 +104,7 @@
             <!-- Botón: Eliminar seleccionado -->
             <Button text="Eliminar"
                     fx:id="btnEliminarEquipo"
+                    onAction="#onEliminarEquipo"
                     GridPane.rowIndex="2"
                     GridPane.columnIndex="2"
                     prefWidth="100" />

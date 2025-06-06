@@ -1,0 +1,74 @@
+[
+  {
+    "id": "616b7f41-8862-4a89-921c-8497336ff125",
+    "deporte": {
+      "nombre": "Futbol",
+      "imagenPath": "C:\\Users\\garza\\OneDrive\\Escritorio\\javafxproject\\TareaProgramada\\src\\main\\resources\\images\\balon5.png"
+    },
+    "maxEquipos": 4,
+    "tiempoPorPartido": 90,
+    "equiposInscritos": [
+      {
+        "nombre": "Saprisa",
+        "fotoPath": "C:\\Users\\garza\\OneDrive\\Escritorio\\javafxproject\\TareaProgramada\\src\\main\\resources\\images\\equipo10.png",
+        "deporte": {
+          "nombre": "Futbol",
+          "imagenPath": "C:\\Users\\garza\\OneDrive\\Escritorio\\javafxproject\\TareaProgramada\\src\\main\\resources\\images\\balon5.png"
+        }
+      },
+      {
+        "nombre": "Liga",
+        "fotoPath": "C:\\Users\\garza\\OneDrive\\Escritorio\\javafxproject\\TareaProgramada\\src\\main\\resources\\images\\equipo8.png",
+        "deporte": {
+          "nombre": "Futbol",
+          "imagenPath": "C:\\Users\\garza\\OneDrive\\Escritorio\\javafxproject\\TareaProgramada\\src\\main\\resources\\images\\balon5.png"
+        }
+      },
+      {
+        "nombre": "Heredia",
+        "fotoPath": "C:\\Users\\garza\\OneDrive\\Escritorio\\javafxproject\\TareaProgramada\\src\\main\\resources\\images\\equipo11.png",
+        "deporte": {
+          "nombre": "Futbol",
+          "imagenPath": "C:\\Users\\garza\\OneDrive\\Escritorio\\javafxproject\\TareaProgramada\\src\\main\\resources\\images\\balon5.png"
+        }
+      },
+      {
+        "nombre": "Cartago",
+        "fotoPath": "C:\\Users\\garza\\OneDrive\\Escritorio\\javafxproject\\TareaProgramada\\src\\main\\resources\\images\\equipo9.png",
+        "deporte": {
+          "nombre": "Futbol",
+          "imagenPath": "C:\\Users\\garza\\OneDrive\\Escritorio\\javafxproject\\TareaProgramada\\src\\main\\resources\\images\\balon5.png"
+        }
+      }
+    ],
+    "partidos": [
+      {
+        "id": "47d2c766-5c4b-4d74-98c7-153b47951ffc",
+        "equipoLocal": {
+          "nombre": "Heredia",
+          "fotoPath": "C:\\Users\\garza\\OneDrive\\Escritorio\\javafxproject\\TareaProgramada\\src\\main\\resources\\images\\equipo11.png",
+          "deporte": {
+            "nombre": "Futbol",
+            "imagenPath": "C:\\Users\\garza\\OneDrive\\Escritorio\\javafxproject\\TareaProgramada\\src\\main\\resources\\images\\balon5.png"
+          }
+        },
+        "equipoVisitante": {
+          "nombre": "Cartago",
+          "fotoPath": "C:\\Users\\garza\\OneDrive\\Escritorio\\javafxproject\\TareaProgramada\\src\\main\\resources\\images\\equipo9.png",
+          "deporte": {
+            "nombre": "Futbol",
+            "imagenPath": "C:\\Users\\garza\\OneDrive\\Escritorio\\javafxproject\\TareaProgramada\\src\\main\\resources\\images\\balon5.png"
+          }
+        },
+        "golesLocal": 0,
+        "golesVisitante": 0,
+        "tiempoMaximo": 90,
+        "finalizado": false,
+        "huboDesempate": false,
+        "fechaHora": "2025-06-06T03:42:03.5366582"
+      }
+    ],
+    "fechaCreacion": "2025-06-06T03:28:32.7318258",
+    "llavesGeneradas": true
+  }
+]

@@ -4,7 +4,6 @@
  */
 package com.mycompany.tareaprogramada.controllers;
 
-
 import com.mycompany.tareaprogramada.models.*;
 import com.mycompany.tareaprogramada.util.CertificadoPDFGenerator;
 import com.mycompany.tareaprogramada.util.LlaveGenerator;
@@ -29,63 +28,84 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 
 /**
- * Controlador de TorneoView.fxml:
- * - Lista de torneos existentes.
- * - Crear / Eliminar torneos.
- * - Mostrar detalles del torneo seleccionado.
- * - Inscribir / Desinscribir equipos.
- * - Generar llaves iniciales.
- * - Listar partidos de la fase actual (con botón “Iniciar partido”).
- * - “Siguiente Ronda” cuando todos los partidos finalizados.
- * - “Imprimir Certificado” cuando el torneo termina.
+ * Controlador de TorneoView.fxml: - Lista de torneos existentes. - Crear /
+ * Eliminar torneos. - Mostrar detalles del torneo seleccionado. - Inscribir /
+ * Desinscribir equipos. - Generar llaves iniciales. - Listar partidos de la
+ * fase actual (con botón “Iniciar partido”). - “Siguiente Ronda” cuando todos
+ * los partidos finalizados. - “Imprimir Certificado” cuando el torneo termina.
  */
 public class TorneoViewController implements Initializable {
 
     // ---------------------------
     // Campos del TOP (Crear/Eliminar torneo)
-    @FXML private ComboBox<Deporte> comboDeporteTorneo;
-    @FXML private TextField campoMaxEquipos;
-    @FXML private TextField campoTiempoPartido;
-    @FXML private Button btnCrearTorneo;
-    @FXML private Button btnEliminarTorneo;
+    @FXML
+    private ComboBox<Deporte> comboDeporteTorneo;
+    @FXML
+    private TextField campoMaxEquipos;
+    @FXML
+    private TextField campoTiempoPartido;
+    @FXML
+    private Button btnCrearTorneo;
+    @FXML
+    private Button btnEliminarTorneo;
 
     // ---------------------------
     // Tabla de torneos en LEFT
-    @FXML private TableView<Torneo> tablaTorneos;
-    @FXML private TableColumn<Torneo, String> colDeporteTorneo;
-    @FXML private TableColumn<Torneo, String> colEquiposTorneo;
+    @FXML
+    private TableView<Torneo> tablaTorneos;
+    @FXML
+    private TableColumn<Torneo, String> colDeporteTorneo;
+    @FXML
+    private TableColumn<Torneo, String> colEquiposTorneo;
 
     // ---------------------------
     // Detalles del torneo seleccionado en CENTER (labels + inscripción)
-    @FXML private Label lblDeporteSeleccionado;
-    @FXML private Label lblMaxEquiposSeleccionado;
-    @FXML private Label lblTiempoSeleccionado;
-    @FXML private ComboBox<Equipo> comboEquiposDisponibles;
-    @FXML private Button btnInscribirEquipo;
+    @FXML
+    private Label lblDeporteSeleccionado;
+    @FXML
+    private Label lblMaxEquiposSeleccionado;
+    @FXML
+    private Label lblTiempoSeleccionado;
+    @FXML
+    private ComboBox<Equipo> comboEquiposDisponibles;
+    @FXML
+    private Button btnInscribirEquipo;
 
     // ---------------------------
     // Tabla de equipos inscritos
-    @FXML private TableView<Equipo> tablaEquiposInscritos;
-    @FXML private TableColumn<Equipo, String> colNombreInscrito;
-    @FXML private TableColumn<Equipo, String> colDeporteInscrito;
-    @FXML private TableColumn<Equipo, String> colAccionInscrito;
+    @FXML
+    private TableView<Equipo> tablaEquiposInscritos;
+    @FXML
+    private TableColumn<Equipo, String> colNombreInscrito;
+    @FXML
+    private TableColumn<Equipo, String> colDeporteInscrito;
+    @FXML
+    private TableColumn<Equipo, String> colAccionInscrito;
 
     // ---------------------------
     // Botón Generar llaves
-    @FXML private Button btnGenerarLlaves;
+    @FXML
+    private Button btnGenerarLlaves;
 
     // ---------------------------
     // Tabla de partidos en fase actual
-    @FXML private TableView<Partido> tablaPartidos;
-    @FXML private TableColumn<Partido, String> colLocal;
-    @FXML private TableColumn<Partido, String> colVisitante;
-    @FXML private TableColumn<Partido, String> colEstado;
-    @FXML private TableColumn<Partido, String> colAccionPartido;
+    @FXML
+    private TableView<Partido> tablaPartidos;
+    @FXML
+    private TableColumn<Partido, String> colLocal;
+    @FXML
+    private TableColumn<Partido, String> colVisitante;
+    @FXML
+    private TableColumn<Partido, String> colEstado;
+    @FXML
+    private TableColumn<Partido, String> colAccionPartido;
 
     // ---------------------------
     // Botones en BOTTOM
-    @FXML private Button btnSiguienteRonda;
-    @FXML private Button btnImprimirCertificado;
+    @FXML
+    private Button btnSiguienteRonda;
+    @FXML
+    private Button btnImprimirCertificado;
 
     // Controladores de negocio
     private DeporteController deporteController = new DeporteController();
@@ -101,8 +121,8 @@ public class TorneoViewController implements Initializable {
         comboDeporteTorneo.setItems(deporteController.getDeportes());
 
         // 2) Configuramos la tabla de torneos
-        colDeporteTorneo.setCellValueFactory(cellData ->
-            new SimpleStringProperty(cellData.getValue().getDeporte().getNombre())
+        colDeporteTorneo.setCellValueFactory(cellData
+                -> new SimpleStringProperty(cellData.getValue().getDeporte().getNombre())
         );
         colEquiposTorneo.setCellValueFactory(cellData -> {
             Torneo t = cellData.getValue();
@@ -122,12 +142,13 @@ public class TorneoViewController implements Initializable {
 
         // 4) Configuramos tabla de equipos inscritos
         colNombreInscrito.setCellValueFactory(new PropertyValueFactory<>("nombre"));
-        colDeporteInscrito.setCellValueFactory(cellData ->
-            new SimpleStringProperty(cellData.getValue().getDeporte().getNombre())
+        colDeporteInscrito.setCellValueFactory(cellData
+                -> new SimpleStringProperty(cellData.getValue().getDeporte().getNombre())
         );
         // En colAccionInscrito pondremos un botón “Desinscribir” en cada fila
         colAccionInscrito.setCellFactory(col -> new TableCell<>() {
             private final Button btn = new Button("Desinscribir");
+
             {
                 btn.setStyle("-fx-background-color:#E53935; -fx-text-fill:white;");
                 btn.setOnAction(e -> {
@@ -135,6 +156,7 @@ public class TorneoViewController implements Initializable {
                     desinscribirEquipo(eq);
                 });
             }
+
             @Override
             protected void updateItem(String item, boolean empty) {
                 super.updateItem(item, empty);
@@ -147,18 +169,19 @@ public class TorneoViewController implements Initializable {
         });
 
         // 5) Configuramos tabla de partidos (fase actual)
-        colLocal.setCellValueFactory(cellData ->
-            new SimpleStringProperty(cellData.getValue().getEquipoLocal().getNombre())
+        colLocal.setCellValueFactory(cellData
+                -> new SimpleStringProperty(cellData.getValue().getEquipoLocal().getNombre())
         );
-        colVisitante.setCellValueFactory(cellData ->
-            new SimpleStringProperty(cellData.getValue().getEquipoVisitante().getNombre())
+        colVisitante.setCellValueFactory(cellData
+                -> new SimpleStringProperty(cellData.getValue().getEquipoVisitante().getNombre())
         );
-        colEstado.setCellValueFactory(cellData ->
-            new SimpleStringProperty(cellData.getValue().isFinalizado() ? "Finalizado" : "Pendiente")
+        colEstado.setCellValueFactory(cellData
+                -> new SimpleStringProperty(cellData.getValue().isFinalizado() ? "Finalizado" : "Pendiente")
         );
         // En colAccionPartido ponemos un botón “Iniciar partido” si no está finalizado
         colAccionPartido.setCellFactory(col -> new TableCell<>() {
             private final Button btn = new Button("Iniciar partido");
+
             {
                 btn.setStyle("-fx-background-color:#3F51B5; -fx-text-fill:white;");
                 btn.setOnAction(e -> {
@@ -166,6 +189,7 @@ public class TorneoViewController implements Initializable {
                     abrirVentanaPartido(p);
                 });
             }
+
             @Override
             protected void updateItem(String item, boolean empty) {
                 super.updateItem(item, empty);
@@ -292,7 +316,9 @@ public class TorneoViewController implements Initializable {
     // Evento: Eliminar torneo seleccionado
     @FXML
     void onEliminarTorneo(ActionEvent event) {
-        if (torneoSeleccionado == null) return;
+        if (torneoSeleccionado == null) {
+            return;
+        }
 
         Alert conf = new Alert(Alert.AlertType.CONFIRMATION,
                 "¿Eliminar torneo de " + torneoSeleccionado.getDeporte().getNombre() + "?",
@@ -310,7 +336,9 @@ public class TorneoViewController implements Initializable {
     // Evento: Inscribir equipo en torneo seleccionado
     @FXML
     void onInscribirEquipo(ActionEvent event) {
-        if (torneoSeleccionado == null) return;
+        if (torneoSeleccionado == null) {
+            return;
+        }
         Equipo eq = comboEquiposDisponibles.getValue();
         if (eq == null) {
             new Alert(Alert.AlertType.WARNING, "Seleccione un equipo.").showAndWait();
@@ -326,7 +354,9 @@ public class TorneoViewController implements Initializable {
     // ---------------------------
     // Desinscribir equipo (botón en tabla de inscritos)
     private void desinscribirEquipo(Equipo eq) {
-        if (torneoSeleccionado == null || eq == null) return;
+        if (torneoSeleccionado == null || eq == null) {
+            return;
+        }
         torneoController.desinscribirEquipoDeTorneo(torneoSeleccionado, eq);
         mostrarDetallesTorneo();
     }
@@ -335,7 +365,9 @@ public class TorneoViewController implements Initializable {
     // Evento: Generar llaves iniciales
     @FXML
     void onGenerarLlaves(ActionEvent event) {
-        if (torneoSeleccionado == null) return;
+        if (torneoSeleccionado == null) {
+            return;
+        }
         torneoController.generarLlavesTorneo(torneoSeleccionado);
         mostrarDetallesTorneo();
     }
@@ -380,14 +412,18 @@ public class TorneoViewController implements Initializable {
             }
         }
         // Solo habilitar si hubo llaves generadas y hay más de 1 partido finalizado
-        btnSiguienteRonda.setDisable(!(todosFinalizados && torneoSeleccionado.getPartidos().size() >= 2));
+        // En vez de exigir size >= 2, permitimos size >= 1 (para que la final también active el botón, si todos sus partidos están listos)
+        btnSiguienteRonda.setDisable(!(todosFinalizados && torneoSeleccionado.getPartidos().size() >= 1));
+
     }
 
     // ---------------------------
     // Evento: Siguiente Ronda
     @FXML
     void onSiguienteRonda(ActionEvent event) {
-        if (torneoSeleccionado == null) return;
+        if (torneoSeleccionado == null) {
+            return;
+        }
         torneoController.generarSiguienteRonda(torneoSeleccionado);
         mostrarDetallesTorneo();
     }
@@ -396,7 +432,9 @@ public class TorneoViewController implements Initializable {
     // Evento: Imprimir certificado
     @FXML
     void onImprimirCertificado(ActionEvent event) {
-        if (torneoSeleccionado == null) return;
+        if (torneoSeleccionado == null) {
+            return;
+        }
         Certificado cert = torneoController.generarCertificado(torneoSeleccionado);
         if (cert == null) {
             new Alert(Alert.AlertType.WARNING, "No se puede generar certificado aún.").showAndWait();

@@ -4,7 +4,6 @@
  */
 package com.mycompany.tareaprogramada.controllers;
 
-
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.event.ActionEvent;
@@ -28,25 +27,34 @@ import java.util.ResourceBundle;
 import javafx.scene.control.ButtonType;
 
 /**
- * Controlador de PartidoView.fxml:
- * - Muestra imágenes de equipo local, balón y equipo visitante.
- * - Maneja Drag & Drop: arrastrar el balón sobre cada equipo para registrar un gol.
- * - Ejecuta un timer regresivo desde tiempoMaximo hasta 0.
- * - Botón “Finalizar partido”: detiene timer, resuelve empate (penales aleatorios) y registra resultado.
+ * Controlador de PartidoView.fxml: - Muestra imágenes de equipo local, balón y
+ * equipo visitante. - Maneja Drag & Drop: arrastrar el balón sobre cada equipo
+ * para registrar un gol. - Ejecuta un timer regresivo desde tiempoMaximo hasta
+ * 0. - Botón “Finalizar partido”: detiene timer, resuelve empate (penales
+ * aleatorios) y registra resultado.
  */
 public class PartidoViewController implements Initializable {
 
-    @FXML private ImageView imgEquipoLocal;
-    @FXML private ImageView imgBalon;
-    @FXML private ImageView imgEquipoVisitante;
+    @FXML
+    private ImageView imgEquipoLocal;
+    @FXML
+    private ImageView imgBalon;
+    @FXML
+    private ImageView imgEquipoVisitante;
 
-    @FXML private Label lblGolesLocal;
-    @FXML private Label lblGolesVisitante;
-    @FXML private Label lblNombreLocal;
-    @FXML private Label lblNombreVisitante;
+    @FXML
+    private Label lblGolesLocal;
+    @FXML
+    private Label lblGolesVisitante;
+    @FXML
+    private Label lblNombreLocal;
+    @FXML
+    private Label lblNombreVisitante;
 
-    @FXML private Label lblTimer;
-    @FXML private Button btnFinalizar;
+    @FXML
+    private Label lblTimer;
+    @FXML
+    private Button btnFinalizar;
 
     private TorneoController torneoController = new TorneoController();
     private Torneo torneoActual;
@@ -220,7 +228,6 @@ public class PartidoViewController implements Initializable {
     //  • Si hay empate, llama a desempate creativo.
     //  • Luego invoca a TorneoController.registrarResultado(...)
     private void finalizarPartido() {
-        // Si todavía no se han contado los segundos (por algún error), detenemos el timer
         if (timeline != null) {
             timeline.stop();
         }
@@ -230,32 +237,23 @@ public class PartidoViewController implements Initializable {
             desempatarPorPenales();
         }
 
-        // Ahora ya hay un ganador (o se mantuvo el marcador si no hubo empate)
-        partidoActual.setGolesLocal(golesLocal);
-        partidoActual.setGolesVisitante(golesVisitante);
-        // Si hubo desempate, marcamos el campo
-        if (golesLocal != golesVisitante && !partidoActual.isFinalizado()) {
-            // Marcamos huboDesempate si el ganador se decidió vía penales
-            if (partidoActual.isHuboDesempate()) {
-                partidoActual.setHuboDesempate(true);
-            }
-        }
-        partidoActual.setFinalizado(true);
+        // Invoco directamente al método de negocio del modelo:
+        //   este método ya asigna golesLocal, golesVisitante, finalizado=true y potencialmente huboDesempate.
+        partidoActual.finalizarPartido(golesLocal, golesVisitante);
 
         // Guardar en JSON a través de TorneoController
         torneoController.registrarResultado(torneoActual, partidoActual.getId(), golesLocal, golesVisitante);
 
-        // Mostrar alerta con el ganador
         String ganador = (golesLocal > golesVisitante)
                 ? partidoActual.getEquipoLocal().getNombre()
                 : partidoActual.getEquipoVisitante().getNombre();
 
-        Alert alerta = new Alert(Alert.AlertType.INFORMATION,
+        new Alert(Alert.AlertType.INFORMATION,
                 "Partido finalizado.\nGanador: " + ganador,
-                ButtonType.OK);
-        alerta.showAndWait();
+                ButtonType.OK
+        ).showAndWait();
 
-        // Cerrar la ventana actual
+        // Cerrar la ventana
         Stage stage = (Stage) lblTimer.getScene().getWindow();
         stage.close();
     }

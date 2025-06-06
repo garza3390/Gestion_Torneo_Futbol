@@ -1,4 +1,3 @@
-<!-- src/main/resources/fxml/DeporteView.fxml -->
 <?xml version="1.0" encoding="UTF-8"?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
@@ -40,12 +39,17 @@
             <TextField fx:id="campoNombreDeporte"
                        promptText="Nombre del deporte"
                        HBox.hgrow="ALWAYS"/>
+
+            <!-- IMPORTANTE: onAction va enlazado al método @FXML correspondiente -->
             <Button text="Seleccionar balón"
-                    fx:id="btnSeleccionarBalon"/>
+                    fx:id="btnSeleccionarBalon"
+                    onAction="#onSeleccionarBalon"/>
             <Button text="Agregar"
-                    fx:id="btnAgregarDeporte"/>
+                    fx:id="btnAgregarDeporte"
+                    onAction="#onAgregarDeporte"/>
             <Button text="Eliminar"
-                    fx:id="btnEliminarDeporte"/>
+                    fx:id="btnEliminarDeporte"
+                    onAction="#onEliminarDeporte"/>
         </HBox>
     </bottom>
 </BorderPane>

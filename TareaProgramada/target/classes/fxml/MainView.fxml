@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="com.mycompany.tareaprogramada.controllers.MainViewController"
+      alignment="CENTER" spacing="15">
+    <!-- Definimos padding como hijo en lugar de atributo -->
+    <padding>
+        <Insets top="20" right="20" bottom="20" left="20"/>
+    </padding>
+
+    <Label text="Menú Principal" style="-fx-font-size:18px; -fx-font-weight:bold;"/>
+    <Button text="Gestionar Deportes" fx:id="btnMenuDeportes" prefWidth="200"/>
+    <Button text="Gestionar Equipos" fx:id="btnMenuEquipos" prefWidth="200"/>
+    <Button text="Gestionar Torneos" fx:id="btnMenuTorneos" prefWidth="200"/>
+    <Button text="Ver Estadísticas" fx:id="btnMenuEstadisticas" prefWidth="200"/>
+</VBox>

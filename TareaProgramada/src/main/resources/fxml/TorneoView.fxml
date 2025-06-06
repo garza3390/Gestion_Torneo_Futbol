@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
+<BorderPane xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.mycompany.tareaprogramada.controllers.TorneoViewController"
+            prefWidth="1000.0" prefHeight="700.0">
+
+    <!-- =============================================
+         TOP: Formulario para crear nuevo Torneo
+         ============================================= -->
+    <top>
+        <GridPane hgap="10" vgap="10">
+            <!-- Definir padding como hijo -->
+            <padding>
+                <Insets top="10" right="10" bottom="10" left="10"/>
+            </padding>
+
+            <Label text="Nuevo Torneo:" GridPane.rowIndex="0" GridPane.columnIndex="0"
+                   style="-fx-font-size:16px; -fx-font-weight:bold;"/>
+
+            <Label text="Deporte:" GridPane.rowIndex="1" GridPane.columnIndex="0"/>
+            <ComboBox fx:id="comboDeporteTorneo"
+                      promptText="Seleccionar deporte"
+                      GridPane.rowIndex="1" GridPane.columnIndex="1"
+                      prefWidth="150"/>
+
+            <Label text="Máx. equipos:" GridPane.rowIndex="1" GridPane.columnIndex="2"/>
+            <TextField fx:id="campoMaxEquipos"
+                       promptText="Número"
+                       GridPane.rowIndex="1" GridPane.columnIndex="3"
+                       prefWidth="80"/>
+
+            <Label text="Tiempo por partido (min):" GridPane.rowIndex="1" GridPane.columnIndex="4"/>
+            <TextField fx:id="campoTiempoPartido"
+                       promptText="Minutos"
+                       GridPane.rowIndex="1" GridPane.columnIndex="5"
+                       prefWidth="80"/>
+
+            <Button text="Crear Torneo"
+                    fx:id="btnCrearTorneo"
+                    GridPane.rowIndex="1" GridPane.columnIndex="6"
+                    prefWidth="120"
+                    style="-fx-font-weight:bold; -fx-background-color:#4CAF50; -fx-text-fill:white;"/>
+
+            <Button text="Eliminar Torneo"
+                    fx:id="btnEliminarTorneo"
+                    GridPane.rowIndex="1" GridPane.columnIndex="7"
+                    prefWidth="120"
+                    style="-fx-font-weight:bold; -fx-background-color:#E53935; -fx-text-fill:white;"/>
+        </GridPane>
+    </top>
+
+    <!-- =============================================
+         LEFT: Tabla de torneos existentes
+         ============================================= -->
+    <left>
+        <VBox spacing="10">
+            <!-- Definir padding como hijo -->
+            <padding>
+                <Insets top="10" right="10" bottom="10" left="10"/>
+            </padding>
+
+            <Label text="Torneos Existentes:" style="-fx-font-size:14px; -fx-font-weight:bold;"/>
+            <TableView fx:id="tablaTorneos" prefWidth="300" prefHeight="550">
+                <columns>
+                    <TableColumn fx:id="colDeporteTorneo"
+                                 text="Deporte"
+                                 prefWidth="120"/>
+                    <TableColumn fx:id="colEquiposTorneo"
+                                 text="Inscritos/Cupo"
+                                 prefWidth="120"/>
+                </columns>
+            </TableView>
+        </VBox>
+    </left>
+
+    <!-- =============================================
+         CENTER: Detalles del torneo seleccionado
+         - Inscribir equipos
+         - Lista de equipos inscritos
+         - Generar llaves y listado de partidos
+         ============================================= -->
+    <center>
+        <VBox spacing="20">
+            <!-- Definir padding como hijo -->
+            <padding>
+                <Insets top="10" right="10" bottom="10" left="10"/>
+            </padding>
+
+            <!-- Sección: Inscribir equipo -->
+            <GridPane hgap="10" vgap="10">
+                <Label text="Detalles del Torneo:" GridPane.rowIndex="0" GridPane.columnIndex="0"
+                       style="-fx-font-size:16px; -fx-font-weight:bold;"/>
+                <Label text="Deporte:" GridPane.rowIndex="1" GridPane.columnIndex="0"/>
+                <Label fx:id="lblDeporteSeleccionado" text="-" GridPane.rowIndex="1" GridPane.columnIndex="1"/>
+
+                <Label text="Máx. Equipos:" GridPane.rowIndex="2" GridPane.columnIndex="0"/>
+                <Label fx:id="lblMaxEquiposSeleccionado" text="-" GridPane.rowIndex="2" GridPane.columnIndex="1"/>
+
+                <Label text="Tiempo partido:" GridPane.rowIndex="3" GridPane.columnIndex="0"/>
+                <Label fx:id="lblTiempoSeleccionado" text="-" GridPane.rowIndex="3" GridPane.columnIndex="1"/>
+
+                <Label text="Inscribir Equipo:" GridPane.rowIndex="4" GridPane.columnIndex="0"/>
+                <ComboBox fx:id="comboEquiposDisponibles"
+                          promptText="Seleccionar equipo"
+                          GridPane.rowIndex="4" GridPane.columnIndex="1"
+                          prefWidth="200"/>
+
+                <Button text="Inscribir"
+                        fx:id="btnInscribirEquipo"
+                        GridPane.rowIndex="4" GridPane.columnIndex="2"
+                        prefWidth="100"
+                        style="-fx-background-color:#2196F3; -fx-text-fill:white;"/>
+            </GridPane>
+
+            <!-- Lista de equipos inscritos -->
+            <VBox spacing="10">
+                <Label text="Equipos Inscritos:" style="-fx-font-size:14px; -fx-font-weight:bold;"/>
+                <TableView fx:id="tablaEquiposInscritos" prefHeight="150">
+                    <columns>
+                        <TableColumn fx:id="colNombreInscrito" text="Nombre" prefWidth="150"/>
+                        <TableColumn fx:id="colDeporteInscrito" text="Deporte" prefWidth="150"/>
+                        <TableColumn fx:id="colAccionInscrito" text="Acción" prefWidth="100"/>
+                    </columns>
+                </TableView>
+            </VBox>
+
+            <!-- Botón para generar llaves iniciales -->
+            <HBox alignment="CENTER_LEFT">
+                <Button text="Generar Llaves"
+                        fx:id="btnGenerarLlaves"
+                        prefWidth="150"
+                        style="-fx-font-weight:bold; -fx-background-color:#FF9800; -fx-text-fill:white;"/>
+            </HBox>
+
+            <!-- Lista de partidos de la fase actual -->
+            <VBox spacing="10">
+                <Label text="Partidos Fase Actual:" style="-fx-font-size:14px; -fx-font-weight:bold;"/>
+                <TableView fx:id="tablaPartidos" prefHeight="200">
+                    <columns>
+                        <TableColumn fx:id="colLocal" text="Local" prefWidth="120"/>
+                        <TableColumn fx:id="colVisitante" text="Visitante" prefWidth="120"/>
+                        <TableColumn fx:id="colEstado" text="Estado" prefWidth="100"/>
+                        <TableColumn fx:id="colAccionPartido" text="Acción" prefWidth="120"/>
+                    </columns>
+                </TableView>
+            </VBox>
+        </VBox>
+    </center>
+
+    <!-- =============================================
+         BOTTOM: Botones “Siguiente ronda” y “Imprimir certificado”
+         ============================================= -->
+    <bottom>
+        <HBox spacing="20" alignment="CENTER">
+            <!-- Definir padding como hijo -->
+            <padding>
+                <Insets top="10" right="10" bottom="10" left="10"/>
+            </padding>
+
+            <Button text="Siguiente Ronda"
+                    fx:id="btnSiguienteRonda"
+                    prefWidth="150"
+                    style="-fx-font-weight:bold; -fx-background-color:#9C27B0; -fx-text-fill:white;"/>
+            <Button text="Imprimir Certificado"
+                    fx:id="btnImprimirCertificado"
+                    prefWidth="180"
+                    style="-fx-font-weight:bold; -fx-background-color:#4CAF50; -fx-text-fill:white;"/>
+        </HBox>
+    </bottom>
+
+</BorderPane>

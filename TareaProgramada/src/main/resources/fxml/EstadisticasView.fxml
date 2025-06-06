@@ -1,0 +1,85 @@
+<!-- src/main/resources/fxml/EstadisticaView.fxml -->
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.geometry.Insets?>
+<?import javafx.geometry.Pos?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.SplitPane?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.layout.HBox?>
+
+<BorderPane xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.mycompany.tareaprogramada.controllers.EstadisticasViewController"
+            prefWidth="900" prefHeight="600">
+
+    <!-- TOP: Selección de equipo -->
+    <top>
+        <HBox spacing="10" alignment="CENTER_LEFT">
+            <padding>
+                <Insets top="10" right="10" bottom="10" left="10"/>
+            </padding>
+            <Label text="Seleccionar Equipo:" style="-fx-font-size:14px;"/>
+            <ComboBox fx:id="comboEquipoEstadisticas" prefWidth="200"/>
+        </HBox>
+    </top>
+
+    <!-- CENTER: TabPane con pestañas: "Torneos del Equipo" y "Ranking Global" -->
+    <center>
+        <TabPane>
+            <!-- Pestaña 1: Torneos en que participó el equipo -->
+            <Tab text="Torneos del Equipo">
+                <SplitPane orientation="VERTICAL">
+                    <!-- Arriba: tabla de torneos -->
+                    <VBox spacing="5">
+                        <padding>
+                            <Insets top="10" right="10" bottom="10" left="10"/>
+                        </padding>
+                        <Label text="Torneos:" style="-fx-font-size:14px; -fx-font-weight:bold;"/>
+                        <TableView fx:id="tablaTorneosEquipo" prefHeight="200">
+                            <columns>
+                                <TableColumn fx:id="colTorneoNombre" text="Torneo" prefWidth="200"/>
+                                <TableColumn fx:id="colTorneoPosicion" text="Posición" prefWidth="100"/>
+                                <TableColumn fx:id="colTorneoPuntos" text="Puntos" prefWidth="100"/>
+                            </columns>
+                        </TableView>
+                    </VBox>
+                    <!-- Abajo: tabla de partidos de torneo seleccionado -->
+                    <VBox spacing="5">
+                        <padding>
+                            <Insets top="10" right="10" bottom="10" left="10"/>
+                        </padding>
+                        <Label text="Detalle de Partidos:" style="-fx-font-size:14px; -fx-font-weight:bold;"/>
+                        <TableView fx:id="tablaPartidosEquipo" prefHeight="200">
+                            <columns>
+                                <TableColumn fx:id="colPartidoFecha" text="Fecha/Hora" prefWidth="150"/>
+                                <TableColumn fx:id="colPartidoRival" text="Rival" prefWidth="150"/>
+                                <TableColumn fx:id="colPartidoResultado" text="Resultado" prefWidth="100"/>
+                            </columns>
+                        </TableView>
+                    </VBox>
+                </SplitPane>
+            </Tab>
+
+            <!-- Pestaña 2: Ranking Global -->
+            <Tab text="Ranking Global">
+                <VBox spacing="5">
+                    <padding>
+                        <Insets top="10" right="10" bottom="10" left="10"/>
+                    </padding>
+                    <Label text="Ranking Global:" style="-fx-font-size:14px; -fx-font-weight:bold;"/>
+                    <TableView fx:id="tablaRankingGlobal">
+                        <columns>
+                            <TableColumn fx:id="colRankingEquipo" text="Equipo" prefWidth="200"/>
+                            <TableColumn fx:id="colRankingPuntos" text="Puntos" prefWidth="100"/>
+                        </columns>
+                    </TableView>
+                </VBox>
+            </Tab>
+        </TabPane>
+    </center>
+</BorderPane>

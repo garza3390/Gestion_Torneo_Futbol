@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Priority?>
+<?import javafx.scene.layout.ColumnConstraints?>
+
+<BorderPane xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.mycompany.tareaprogramada.controllers.EquipoViewController"
+            prefWidth="800.0" prefHeight="500.0">
+
+    <!-- ============================
+         Tabla de Equipos en el centro
+         ============================ -->
+    <center>
+        <TableView fx:id="tablaEquipos" prefWidth="800.0" prefHeight="350.0">
+            <columns>
+                <!-- Columna: Nombre del equipo -->
+                <TableColumn fx:id="colNombreEquipo"
+                             text="Nombre"
+                             prefWidth="200.0" />
+                <!-- Columna: Nombre del deporte -->
+                <TableColumn fx:id="colDeporteEquipo"
+                             text="Deporte"
+                             prefWidth="200.0" />
+                <!-- Columna: Foto (miniatura) -->
+                <TableColumn fx:id="colFotoEquipo"
+                             text="Foto"
+                             prefWidth="150.0" />
+            </columns>
+        </TableView>
+    </center>
+
+    <!-- ============================
+         Panel inferior con formulario
+         ============================ -->
+    <bottom>
+        <GridPane hgap="10" vgap="10">
+            <!-- Definición de padding como hijo -->
+            <padding>
+                <Insets top="10" right="10" bottom="10" left="10"/>
+            </padding>
+
+            <columnConstraints>
+                <ColumnConstraints hgrow="SOMETIMES" />
+                <ColumnConstraints hgrow="SOMETIMES" />
+                <ColumnConstraints hgrow="SOMETIMES" />
+                <ColumnConstraints hgrow="SOMETIMES" />
+                <ColumnConstraints hgrow="SOMETIMES" />
+            </columnConstraints>
+
+            <!-- Label y TextField: Nombre del equipo -->
+            <Label text="Nombre:"
+                   GridPane.rowIndex="0"
+                   GridPane.columnIndex="0" />
+            <TextField fx:id="campoNombreEquipo"
+                       promptText="Ingrese nombre"
+                       GridPane.rowIndex="0"
+                       GridPane.columnIndex="1"
+                       GridPane.columnSpan="2" />
+
+            <!-- Label y ComboBox: Deporte -->
+            <Label text="Deporte:"
+                   GridPane.rowIndex="0"
+                   GridPane.columnIndex="3" />
+            <ComboBox fx:id="comboDeporte"
+                      promptText="Seleccione deporte"
+                      GridPane.rowIndex="0"
+                      GridPane.columnIndex="4"
+                      prefWidth="150.0" />
+
+            <!-- Button: Seleccionar foto -->
+            <Button text="Seleccionar foto"
+                    fx:id="btnSeleccionarFoto"
+                    GridPane.rowIndex="1"
+                    GridPane.columnIndex="0"
+                    GridPane.columnSpan="2" />
+
+            <!-- Label que muestra ruta o confirmación -->
+            <Label fx:id="labelRutaFoto"
+                   text="Ninguna foto"
+                   GridPane.rowIndex="1"
+                   GridPane.columnIndex="2"
+                   GridPane.columnSpan="3" />
+
+            <!-- Botón: Agregar equipo -->
+            <Button text="Agregar"
+                    fx:id="btnAgregarEquipo"
+                    GridPane.rowIndex="2"
+                    GridPane.columnIndex="1"
+                    prefWidth="100" />
+
+            <!-- Botón: Eliminar seleccionado -->
+            <Button text="Eliminar"
+                    fx:id="btnEliminarEquipo"
+                    GridPane.rowIndex="2"
+                    GridPane.columnIndex="2"
+                    prefWidth="100" />
+        </GridPane>
+    </bottom>
+</BorderPane>

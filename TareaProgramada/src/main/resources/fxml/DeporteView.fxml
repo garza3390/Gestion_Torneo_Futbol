@@ -1,0 +1,51 @@
+<!-- src/main/resources/fxml/DeporteView.fxml -->
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Priority?>
+
+<BorderPane xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.mycompany.tareaprogramada.controllers.DeporteViewController"
+            prefWidth="500" prefHeight="400">
+
+    <!-- Tabla de Deportes en el centro -->
+    <center>
+        <TableView fx:id="tablaDeportes" prefHeight="300" prefWidth="480">
+            <columns>
+                <TableColumn fx:id="colNombreDeporte"
+                             text="Nombre"
+                             prefWidth="200"/>
+                <TableColumn fx:id="colImagenDeporte"
+                             text="Imagen"
+                             prefWidth="200"/>
+            </columns>
+        </TableView>
+    </center>
+
+    <!-- Formulario inferior: nombre + seleccionar imagen + botones -->
+    <bottom>
+        <HBox spacing="10">
+            <!-- Definición de padding como hijo -->
+            <padding>
+                <Insets top="10" right="10" bottom="10" left="10"/>
+            </padding>
+
+            <TextField fx:id="campoNombreDeporte"
+                       promptText="Nombre del deporte"
+                       HBox.hgrow="ALWAYS"/>
+            <Button text="Seleccionar balón"
+                    fx:id="btnSeleccionarBalon"/>
+            <Button text="Agregar"
+                    fx:id="btnAgregarDeporte"/>
+            <Button text="Eliminar"
+                    fx:id="btnEliminarDeporte"/>
+        </HBox>
+    </bottom>
+</BorderPane>

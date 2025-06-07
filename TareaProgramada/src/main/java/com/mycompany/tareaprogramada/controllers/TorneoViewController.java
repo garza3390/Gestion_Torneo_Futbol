@@ -197,11 +197,8 @@ public class TorneoViewController implements Initializable {
                     setGraphic(null);
                 } else {
                     Partido p = getTableView().getItems().get(getIndex());
-                    if (p.isFinalizado()) {
-                        setGraphic(null);
-                    } else {
-                        setGraphic(btn);
-                    }
+                    setGraphic(btn);
+                    btn.setDisable(p.isFinalizado());
                 }
             }
         });
@@ -223,6 +220,8 @@ public class TorneoViewController implements Initializable {
     // ---------------------------
     // Mostrar detalles del torneo seleccionado en el área central
     private void mostrarDetallesTorneo() {
+        
+
         if (torneoSeleccionado == null) {
             lblDeporteSeleccionado.setText("-");
             lblMaxEquiposSeleccionado.setText("-");
@@ -250,6 +249,8 @@ public class TorneoViewController implements Initializable {
         if (torneoSeleccionado.isLlavesGeneradas()) {
             ObservableList<Partido> partidos = FXCollections.observableArrayList(torneoSeleccionado.getPartidos());
             tablaPartidos.setItems(partidos);
+            tablaPartidos.refresh();
+
         } else {
             tablaPartidos.setItems(FXCollections.emptyObservableList());
         }
@@ -414,6 +415,19 @@ public class TorneoViewController implements Initializable {
         // Solo habilitar si hubo llaves generadas y hay más de 1 partido finalizado
         // En vez de exigir size >= 2, permitimos size >= 1 (para que la final también active el botón, si todos sus partidos están listos)
         btnSiguienteRonda.setDisable(!(todosFinalizados && torneoSeleccionado.getPartidos().size() >= 1));
+
+        if (todosFinalizados) {
+            // 1. Obtener el Stage (ventana) padre para pasar como owner
+            Stage owner = (Stage) btnSiguienteRonda.getScene().getWindow();
+
+            // 2. El campeón es el ganador del último partido
+            List<Partido> partidos = torneoSeleccionado.getPartidos();
+            Partido partidoFinal = partidos.get(partidos.size() - 1);
+            Equipo campeon = partidoFinal.obtenerGanador();
+
+            // 3. Mostrar la animación
+            com.mycompany.tareaprogramada.util.ChampionAnimation.mostrarAnimacion(owner, campeon);
+        }
 
     }
 

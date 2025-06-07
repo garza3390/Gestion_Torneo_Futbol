@@ -25,6 +25,7 @@ com\mycompany\tareaprogramada\models\Equipo.class
 com\mycompany\tareaprogramada\controllers\CertificadoController.class
 com\mycompany\tareaprogramada\controllers\DeporteController$1.class
 com\mycompany\tareaprogramada\controllers\MainViewController.class
+com\mycompany\tareaprogramada\util\ChampionAnimation.class
 com\mycompany\tareaprogramada\controllers\DeporteViewController.class
 com\mycompany\tareaprogramada\models\Estadistica.class
 com\mycompany\tareaprogramada\App.class

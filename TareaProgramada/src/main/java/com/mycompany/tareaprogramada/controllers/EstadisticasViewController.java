@@ -16,38 +16,57 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import java.net.URL;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
+import javafx.collections.transformation.FilteredList;
 
 public class EstadisticasViewController implements Initializable {
 
-    @FXML private ComboBox<Equipo> comboEquipoEstadisticas;
+    @FXML
+    private ComboBox<Equipo> comboEquipoEstadisticas;
 
     // Pestaña "Torneos del Equipo"
-    @FXML private TableView<Torneo> tablaTorneosEquipo;
-    @FXML private TableColumn<Torneo, String> colTorneoNombre;
-    @FXML private TableColumn<Torneo, Integer> colTorneoPosicion;
-    @FXML private TableColumn<Torneo, Integer> colTorneoPuntos;
+    @FXML
+    private TableView<Torneo> tablaTorneosEquipo;
+    @FXML
+    private TableColumn<Torneo, String> colTorneoNombre;
+    @FXML
+    private TableColumn<Torneo, Integer> colTorneoPosicion;
+    @FXML
+    private TableColumn<Torneo, Integer> colTorneoPuntos;
 
-    @FXML private TableView<Partido> tablaPartidosEquipo;
-    @FXML private TableColumn<Partido, String> colPartidoFecha;
-    @FXML private TableColumn<Partido, String> colPartidoRival;
-    @FXML private TableColumn<Partido, String> colPartidoResultado;
+    @FXML
+    private TableView<Partido> tablaPartidosEquipo;
+    @FXML
+    private TableColumn<Partido, String> colPartidoFecha;
+    @FXML
+    private TableColumn<Partido, String> colPartidoRival;
+    @FXML
+    private TableColumn<Partido, String> colPartidoResultado;
 
     // Pestaña "Ranking Global"
-    @FXML private TableView<Map.Entry<String,Integer>> tablaRankingGlobal;
-    @FXML private TableColumn<Map.Entry<String,Integer>, String> colRankingEquipo;
-    @FXML private TableColumn<Map.Entry<String,Integer>, Integer> colRankingPuntos;
+    @FXML
+    private TableView<Map.Entry<String, Integer>> tablaRankingGlobal;
+    @FXML
+    private TableColumn<Map.Entry<String, Integer>, String> colRankingEquipo;
+    @FXML
+    private TableColumn<Map.Entry<String, Integer>, Integer> colRankingPuntos;
 
     private EquipoController equipoController = new EquipoController();
     private TorneoController torneoController = new TorneoController();
+    // Lista de todos los torneos, filtrable por equipo
+    private FilteredList<Torneo> torneosFiltrados;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         // Llenar combo de equipos
         comboEquipoEstadisticas.setItems(equipoController.getEquipos());
 
+        ObservableList<Torneo> allTorneos = torneoController.getTorneos();
+        torneosFiltrados = new FilteredList<>(allTorneos, t -> false);
+        tablaTorneosEquipo.setItems(torneosFiltrados);
+
         // Configurar tabla de torneos del equipo
-        colTorneoNombre.setCellValueFactory(cell -> new SimpleStringProperty(cell.getValue().getDeporte().getNombre() + 
-                " (" + cell.getValue().getEquiposInscritos().size() + " equipos)"));
+        colTorneoNombre.setCellValueFactory(cell -> new SimpleStringProperty(cell.getValue().getDeporte().getNombre()
+                + " (" + cell.getValue().getEquiposInscritos().size() + " equipos)"));
         colTorneoPosicion.setCellValueFactory(cell -> {
             Torneo t = cell.getValue();
             Equipo seleccionado = comboEquipoEstadisticas.getValue();
@@ -81,8 +100,8 @@ public class EstadisticasViewController implements Initializable {
         });
 
         // Configurar tabla de partidos
-        colPartidoFecha.setCellValueFactory(cell -> 
-            new SimpleStringProperty(cell.getValue().getFechaHora().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")))
+        colPartidoFecha.setCellValueFactory(cell
+                -> new SimpleStringProperty(cell.getValue().getFechaHora().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")))
         );
         colPartidoRival.setCellValueFactory(cell -> {
             Partido p = cell.getValue();
@@ -96,7 +115,7 @@ public class EstadisticasViewController implements Initializable {
         colPartidoResultado.setCellValueFactory(cell -> {
             Partido p = cell.getValue();
             Equipo sel = comboEquipoEstadisticas.getValue();
-            int golesSel = (p.getEquipoLocal().getNombre().equals(sel.getNombre())) 
+            int golesSel = (p.getEquipoLocal().getNombre().equals(sel.getNombre()))
                     ? p.getGolesLocal()
                     : p.getGolesVisitante();
             int golesRival = (p.getEquipoLocal().getNombre().equals(sel.getNombre()))
@@ -111,17 +130,21 @@ public class EstadisticasViewController implements Initializable {
 
         // Cuando se elige un equipo, recargar “Torneos del equipo” y “Ranking global”
         comboEquipoEstadisticas.getSelectionModel().selectedItemProperty().addListener((obs, viejo, nuevo) -> {
-            if (nuevo != null) {
-                cargarTorneosDelEquipo(nuevo);
+            if (nuevo == null) {
+                torneosFiltrados.setPredicate(t -> false);
             } else {
-                tablaTorneosEquipo.setItems(FXCollections.emptyObservableList());
-                tablaPartidosEquipo.setItems(FXCollections.emptyObservableList());
+                // Sólo los torneos donde participó "nuevo"
+                torneosFiltrados.setPredicate(t
+                        -> t.getEquiposInscritos().stream()
+                                .anyMatch(e -> e.getNombre().equals(nuevo.getNombre()))
+                );
             }
-            cargarRankingGlobal();
+            // Limpiar detalle de partidos y recargar ranking para el nuevo equipo
+            tablaPartidosEquipo.getItems().clear();
+            cargarRankingGlobal(nuevo);
         });
 
-        // Inicialmente, ranking global en cero
-        cargarRankingGlobal();
+      
     }
 
     private void cargarTorneosDelEquipo(Equipo equipo) {
@@ -136,22 +159,25 @@ public class EstadisticasViewController implements Initializable {
     }
 
     private void mostrarPartidosDelTorneo(Torneo t) {
-        if (t == null) return;
+        if (t == null) {
+            return;
+        }
         Equipo sel = comboEquipoEstadisticas.getValue();
         ObservableList<Partido> listaPartidos = FXCollections.observableArrayList();
         for (Partido p : t.getPartidos()) {
             // Solo agregar si el equipo participó en ese partido y ya está finalizado
-            if (p.isFinalizado() && 
-                (p.getEquipoLocal().getNombre().equals(sel.getNombre()) ||
-                 p.getEquipoVisitante().getNombre().equals(sel.getNombre()))) {
+            if (p.isFinalizado()
+                    && (p.getEquipoLocal().getNombre().equals(sel.getNombre())
+                    || p.getEquipoVisitante().getNombre().equals(sel.getNombre()))) {
                 listaPartidos.add(p);
             }
         }
         tablaPartidosEquipo.setItems(listaPartidos);
+        tablaPartidosEquipo.refresh();
+
     }
 
-    private void cargarRankingGlobal() {
-        // Mapa de <Equipo, puntosTotales>
+    private void cargarRankingGlobal(Equipo sel) {
         Map<String, Integer> ranking = new HashMap<>();
         for (Torneo t : torneoController.getTorneos()) {
             List<Estadistica> ests = torneoController.calcularEstadisticas(t);
@@ -159,9 +185,15 @@ public class EstadisticasViewController implements Initializable {
                 ranking.merge(est.getEquipo().getNombre(), est.getPuntos(), Integer::sum);
             }
         }
-        // Convertir a lista ordenada
-        List<Map.Entry<String,Integer>> lista = new ArrayList<>(ranking.entrySet());
-        lista.sort((a,b) -> b.getValue().compareTo(a.getValue()));
-        tablaRankingGlobal.setItems(FXCollections.observableArrayList(lista));
+        List<Map.Entry<String, Integer>> lista = new ArrayList<>(ranking.entrySet());
+        lista.sort((a, b) -> b.getValue().compareTo(a.getValue()));
+        ObservableList<Map.Entry<String, Integer>> data = FXCollections.observableArrayList(lista);
+
+// Si hay equipo seleccionado, mostrar sólo su entrada
+        if (sel != null) {
+            data = data.filtered(e -> e.getKey().equals(sel.getNombre()));
+        }
+        tablaRankingGlobal.setItems(data);
+
     }
 }

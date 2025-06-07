@@ -173,9 +173,8 @@ public class TorneoController {
         if (t == null || partidoId == null) {
             return;
         }
-
         for (Partido p : t.getPartidos()) {
-            if (p.getId().equals(partidoId) && !p.isFinalizado()) {
+            if (p.getId().equals(partidoId)) {
                 p.finalizarPartido(golesLocal, golesVisitante);
                 break;
             }
